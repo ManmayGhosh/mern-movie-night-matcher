@@ -7,6 +7,15 @@ require("dotenv").config();
 const dns = require("dns");
 dns.setDefaultResultOrder("ipv4first");
 
+// Node 18.13+ also races IPv4/IPv6 connections concurrently ("Happy
+// Eyeballs") regardless of the DNS ordering above. Under some Docker/WSL2
+// network setups that race itself is what dies mid-handshake, so we turn it
+// off entirely and connect sequentially instead.
+const net = require("net");
+if (typeof net.setDefaultAutoSelectFamily === "function") {
+  net.setDefaultAutoSelectFamily(false);
+}
+
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
