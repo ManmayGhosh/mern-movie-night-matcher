@@ -1,0 +1,50 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: movie-matcher-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  server:
+    build:
+      context: ./server
+    container_name: movie-matcher-server
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    environment:
+      # These override whatever is in server/.env so the container always
+      # talks to the "mongo" service and accepts requests from the client
+      # container, regardless of what you've set locally.
+      MONGO_URI: mongodb://mongo:27017/movie-night-matcher
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/app
+      - server_node_modules:/app/node_modules
+    depends_on:
+      - mongo
+
+  client:
+    build:
+      context: ./client
+    container_name: movie-matcher-client
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:4000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - client_node_modules:/app/node_modules
+    depends_on:
+      - server
+
+volumes:
+  mongo-data:
+  server_node_modules:
+  client_node_modules:

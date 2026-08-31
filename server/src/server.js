@@ -1,4 +1,12 @@
 require("dotenv").config();
+
+// Docker containers frequently have broken/unrouted IPv6 even when DNS still
+// returns an IPv6 address for a host. Node's built-in fetch (undici) tries
+// IPv6 first by default, which then hangs/dies mid-TLS-handshake against
+// sites like TMDB that publish AAAA records. Preferring IPv4 avoids that.
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
+
 const express = require("express");
 const http = require("http");
 const cors = require("cors");

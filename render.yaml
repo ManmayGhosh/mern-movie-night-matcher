@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: movie-matcher-server
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 4000
+      - key: MONGO_URI
+        sync: false # paste your MongoDB Atlas connection string here (Render has no built-in Mongo)
+      - key: TMDB_API_KEY
+        sync: false # paste your TMDB v3 API key here
+      - key: CLIENT_URL
+        sync: false # fill in AFTER the client service deploys, e.g. https://movie-matcher-client.onrender.com
+
+  - type: web
+    name: movie-matcher-client
+    runtime: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false # fill in AFTER the server service deploys, e.g. https://movie-matcher-server.onrender.com
