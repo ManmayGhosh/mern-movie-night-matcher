@@ -9,6 +9,9 @@ movie-night-matcher-mern/
 └── client/   React (Vite) frontend
 ```
 
+**[Live demo](https://movie-matcher-client.onrender.com/)**
+---
+
 ## How it works
 
 - **Create/join a room** — `POST /api/rooms` fetches the current TMDB popular
