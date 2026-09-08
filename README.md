@@ -139,3 +139,10 @@ swiping and matching in action.
   for more variety.
 - Streaming availability is looked up for the region set at room creation.
   TMDB's coverage varies by country.
+
+
+**Movie Night Matcher** | *React, Node.js, Express, MongoDB, Socket.io, Docker*    July 2026 – Present
+- Built a full-stack MERN app for real-time group movie decisions, using Socket.io to sync swipes across every participant in a room and auto-detect the moment everyone agrees
+- Designed a server-side TMDB integration that assembles a per-room movie deck (genres, runtime, region-specific streaming providers) through chained API calls, keeping the API key isolated from the client entirely
+- Containerized the full stack (MongoDB, Express API, React/Vite client) with Docker Compose for one-command local development, then deployed it as two independently managed services on Render
+- Diagnosed and resolved a platform-specific Node.js networking failure (Alpine's musl-libc DNS resolver breaking `fetch` while raw TLS connections succeeded) through systematic layer-by-layer isolation testing
